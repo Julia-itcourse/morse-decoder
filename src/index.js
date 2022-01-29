@@ -37,19 +37,24 @@ const MORSE_TABLE = {
   "-----": "0",
 };
 
-function decode(string) {
+function convertMorseTable() {
   const resultMap = {};
-  for (let [morseKey, value] of Object.entries(MORSE_TABLE)) {
-    let newKey = morseKey.replaceAll("-", "11");
-    newKey = newKey.replaceAll(".", "10");
+  for (const [key, value] of Object.entries(MORSE_TABLE)) {
+    let newKey = key.replace(/-/g, "11");
+    newKey = newKey.replace(/\./g, "10");
     newKey = newKey.padStart(10, "0");
     resultMap[newKey] = value;
   }
   resultMap["**********"] = " ";
 
-  const result = chunkString(string, 10);
+  return resultMap;
+}
 
-  const convertedArray = result.map((chunk) => resultMap[chunk]);
+const CONVERTED_MORS_TABLE = convertMorseTable();
+
+function decode(string) {
+  const result = chunkString(string, 10);
+  const convertedArray = result.map((chunk) => CONVERTED_MORS_TABLE[chunk]);
   const consvertedString = convertedArray.join("");
   return consvertedString;
 }
